@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/omok/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link rel="modulepreload" href="/omok/_app/immutable/entry/start.X5nRkUDd.js">
+		<link rel="modulepreload" href="/omok/_app/immutable/chunks/entry.HnQ2FBzo.js">
+		<link rel="modulepreload" href="/omok/_app/immutable/chunks/scheduler.zMJaRgub.js">
+		<link rel="modulepreload" href="/omok/_app/immutable/entry/app.t0XEIyVp.js">
+		<link rel="modulepreload" href="/omok/_app/immutable/chunks/index.VvaOWeak.js">
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">
+			<script>
+				{
+					__sveltekit_1uwx2m3 = {
+						base: "/omok",
+						assets: "/omok"
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("/omok/_app/immutable/entry/start.X5nRkUDd.js"),
+						import("/omok/_app/immutable/entry/app.t0XEIyVp.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element);
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
