@@ -14,10 +14,12 @@
         }
         if (checkConsecutiveStones()) {
             alert(`${isBlackTurn ? 'Black' : 'White'} wins!`);
+            isGameFinished = true;
             return;
         }
         if (moves.length === 81) {
-            alert('It\'s a draw!');
+            alert(`It's a draw!`);
+            isGameFinished = true;
             return;
         }
         moves.push([row, col]);
@@ -26,12 +28,15 @@
 
     function restartGame() {
         // confirm
-        if (!confirm('Are you sure you want to restart the game?')) {
-            return;
+        if (!isGameFinished) {
+            if (!confirm('Are you sure you want to restart the game?')) {
+                return;
+            }
         }
         board = Array(9).fill(null).map(() => Array(9).fill(null));
         moves = [];
         isBlackTurn = true;
+        isGameFinished = false;
     }
 
     function undoMove() {
@@ -197,6 +202,13 @@
 </style>
 
 <div class="container">
+    <div>
+        <label>
+            Blind Mode
+            <input type="checkbox" bind:checked={isBlindMode} />
+        </label>
+    </div>
+
     <div class="title-container">
         <h1>Connect Five</h1>
         <p>{isBlackTurn ? 'Black' : 'White'}'s turn</p>
@@ -227,13 +239,7 @@
     <div class="button-container">
         <div>
             <button on:click={restartGame}>Restart Game</button>
-            <button on:click={undoMove}>Undo Move</button>
-        </div>
-        <div>
-            <label>
-                Blind Mode
-                <input type="checkbox" bind:checked={isBlindMode} />
-            </label>
+            <button on:click={undoMove} disabled={isGameFinished}>Undo Move</button>
         </div>
     </div>
 </div>
