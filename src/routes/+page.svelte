@@ -1,5 +1,7 @@
 <script lang="ts">
-    let board = Array(9).fill(null).map(() => Array(9).fill(null));
+    const LINES = 11;
+
+    let board = Array(LINES).fill(null).map(() => Array(LINES).fill(null));
     let isBlackTurn = true;
     let isBlindMode = false;
     let isGameFinished = false;
@@ -15,15 +17,23 @@
         if (checkConsecutiveStones()) {
             alert(`${isBlackTurn ? 'Black' : 'White'} wins!`);
             isGameFinished = true;
+            isBlindMode = false;
             return;
         }
-        if (moves.length === 81) {
+        if (moves.length === LINES * LINES) {
             alert(`It's a draw!`);
             isGameFinished = true;
+            isBlindMode = false;
             return;
         }
         moves.push([row, col]);
         isBlackTurn = !isBlackTurn;
+    }
+
+    function handleKeyDown(event: KeyboardEvent, row: number, col: number) {
+        if (event.key === 'Enter') {
+            handleClick(row, col);
+        }
     }
 
     function restartGame() {
@@ -33,7 +43,7 @@
                 return;
             }
         }
-        board = Array(9).fill(null).map(() => Array(9).fill(null));
+        board = Array(LINES).fill(null).map(() => Array(LINES).fill(null));
         moves = [];
         isBlackTurn = true;
         isGameFinished = false;
@@ -47,7 +57,7 @@
     }
 
     function checkConsecutiveStones() {
-        const size = 9;
+        const size = LINES;
 
         // Check horizontally
         for (let row = 0; row < size; row++) {
@@ -132,12 +142,16 @@
 
     .board {
         display: grid;
-        grid-template-columns: repeat(9, 40px);
-        grid-template-rows: repeat(9, 40px);
-        grid-gap: 0px;
+        grid-template-columns: repeat(var(--lines), calc(100% / var(--lines)));
+        grid-template-rows: repeat(var(--lines), calc(100% / var(--lines)));
+        grid-gap: 0;
         background-color: #DCB35C; /* Brown background color */
         padding: 5px; /* Add padding for the grid lines */
         position: relative; /* Add position relative to the board */
+        width: 90vw; /* Set max width for the board */
+        max-width: 500px;
+        height: 90vw; /* Set max height for the board */
+        max-height: 500px;
     }
 
     .line {
@@ -160,8 +174,8 @@
     }
 
     .cell {
-        width: 40px;
-        height: 40px;
+        width: 100%;
+        height: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -201,45 +215,47 @@
     }
 </style>
 
-<div class="container">
-    <div>
-        <label>
-            Blind Mode
-            <input type="checkbox" bind:checked={isBlindMode} />
-        </label>
-    </div>
-
-    <div class="title-container">
-        <h1>Connect Five</h1>
-        <p>{isBlackTurn ? 'Black' : 'White'}'s turn</p>
-    </div>
-    <div class="board-container">
-        <div class="board">
-            {#each board as row, rowIndex}
-                {#each row as cell, colIndex}
-                    <div class="cell" on:click={() => handleClick(rowIndex, colIndex)}>
-                        {#if colIndex < 9}
-                            <div class="line vertical-line"></div>
-                        {/if}
-                        {#if rowIndex < 9}
-                            <div class="line horizontal-line"></div>
-                        {/if}
-                        {#if isBlindMode && cell !== null}
-                            <div class="stone purple-stone"></div>
-                        {:else if cell === 'B'}
-                            <div class="stone black-stone"></div>
-                        {:else if cell === 'W'}
-                            <div class="stone white-stone"></div>
-                        {/if}
-                    </div>
-                {/each}
-            {/each}
-        </div>
-    </div>
-    <div class="button-container">
+<div style='--lines:{LINES};'>
+    <div class="container">
         <div>
-            <button on:click={restartGame}>Restart Game</button>
-            <button on:click={undoMove} disabled={isGameFinished}>Undo Move</button>
+            <label>
+                Blind Mode
+                <input type="checkbox" bind:checked={isBlindMode} />
+            </label>
+        </div>
+
+        <div class="title-container">
+            <h1>Connect Five</h1>
+            <p>{isBlackTurn ? 'Black' : 'White'}'s turn</p>
+        </div>
+        <div class="board-container">
+            <div class="board">
+                {#each board as row, rowIndex}
+                    {#each row as cell, colIndex}
+                        <div class="cell" role="button" tabindex="0" on:click={() => handleClick(rowIndex, colIndex)} on:keydown={(event) => handleKeyDown(event, rowIndex, colIndex)}>
+                            {#if colIndex < LINES}
+                                <div class="line vertical-line"></div>
+                            {/if}
+                            {#if rowIndex < LINES}
+                                <div class="line horizontal-line"></div>
+                            {/if}
+                            {#if isBlindMode && cell !== null}
+                                <div class="stone purple-stone"></div>
+                            {:else if cell === 'B'}
+                                <div class="stone black-stone"></div>
+                            {:else if cell === 'W'}
+                                <div class="stone white-stone"></div>
+                            {/if}
+                        </div>
+                    {/each}
+                {/each}
+            </div>
+        </div>
+        <div class="button-container">
+            <div>
+                <button on:click={restartGame}>Restart Game</button>
+                <button on:click={undoMove} disabled={isGameFinished}>Undo Move</button>
+            </div>
         </div>
     </div>
 </div>
