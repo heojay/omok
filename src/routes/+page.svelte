@@ -20,7 +20,7 @@
             isBlindMode = false;
             return;
         }
-        if (moves.length === LINES * LINES) {
+        if (moves.length >= LINES * LINES - 1) {
             alert(`It's a draw!`);
             isGameFinished = true;
             isBlindMode = false;
@@ -190,6 +190,12 @@
         width: 80%;
         height: 80%;
         position: absolute;
+        /* Add gradient for shiny effect */
+        background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.8), rgba(255,255,255,0) 70%);
+        /* Add box-shadow for depth */
+        box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        /* Add transition for smooth hover effect */
+        transition: transform 0.2s ease;
     }
 
     .black-stone {
@@ -197,8 +203,7 @@
     }
 
     .white-stone {
-        background-color: #fff;
-        border: 1px solid #000;
+        background-color: #fbfbfb;
     }
 
     .purple-stone {
@@ -211,7 +216,7 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
-        margin-bottom: 20px; /* Adjust the margin as needed */
+        margin-bottom: 7em; /* Adjust the margin as needed */
     }
 </style>
 
@@ -226,7 +231,7 @@
 
         <div class="title-container">
             <h1>Connect Five</h1>
-            <p>{isBlackTurn ? 'Black' : 'White'}'s turn</p>
+            <p>{isBlackTurn ? '⚫ Black' : '⚪ White'}'s turn {isBlackTurn ? '⚫' : '⚪'}</p>
         </div>
         <div class="board-container">
             <div class="board">
